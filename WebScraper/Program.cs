@@ -102,8 +102,8 @@ namespace WebScraper
                             });
                         if (ogMeta != null && ogMeta.Count() > 0)
                         {
-                            title = (ogMeta.Where(x => x.Property == "og:title" && !string.IsNullOrEmpty(x.Content)).Select(x => x.Content).FirstOrDefault() ?? "").Trim();
-                            description = ogMeta.Where(x => x.Property == "og:description" && !string.IsNullOrEmpty(x.Content)).Select(x => x.Content).FirstOrDefault() ?? "";
+                            title = (ogMeta.Where(x => x.Property == "og:title" && !string.IsNullOrEmpty(x.Content)).Select(x => x.Content).FirstOrDefault() ?? title ?? "").Trim();
+                            description = ogMeta.Where(x => x.Property == "og:description" && !string.IsNullOrEmpty(x.Content)).Select(x => x.Content).FirstOrDefault() ?? description ?? "";
                             image = ogMeta.Where(x => x.Property == "og:image" && !string.IsNullOrEmpty(x.Content)).Select(x => CreateUriSafely(htmlUri, x.Content)).FirstOrDefault();
                             video = ogMeta.Where(x => x.Property == "og:video" && !string.IsNullOrEmpty(x.Content)).Select(x => CreateUriSafely(htmlUri, x.Content)).FirstOrDefault();
                             video = CleanYouTube(video);
@@ -120,9 +120,9 @@ namespace WebScraper
                         if (twitterMeta != null && twitterMeta.Count() > 0)
                         {
                             if (string.IsNullOrEmpty(title))
-                                title = (twitterMeta.Where(x => x.Property == "twitter:title" && !string.IsNullOrEmpty(x.Content)).Select(x => x.Content).FirstOrDefault() ?? "").Trim();
+                                title = (twitterMeta.Where(x => x.Property == "twitter:title" && !string.IsNullOrEmpty(x.Content)).Select(x => x.Content).FirstOrDefault() ?? title ?? "").Trim();
                             if (string.IsNullOrEmpty(description))
-                                description = twitterMeta.Where(x => x.Property == "twitter:description" && !string.IsNullOrEmpty(x.Content)).Select(x => x.Content).FirstOrDefault() ?? "";
+                                description = twitterMeta.Where(x => x.Property == "twitter:description" && !string.IsNullOrEmpty(x.Content)).Select(x => x.Content).FirstOrDefault() ?? description ?? "";
                             if (image == null)
                                 image = twitterMeta.Where(x => x.Property == "twitter:image" && !string.IsNullOrEmpty(x.Content)).Select(x => CreateUriSafely(htmlUri, x.Content)).FirstOrDefault();
                             if (video == null)
