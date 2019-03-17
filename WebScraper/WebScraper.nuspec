@@ -1,0 +1,17 @@
+﻿<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>WebScraper</id>
+    <version>$version$</version>
+    <title>WebScraper</title>
+    <authors>$author$</authors>
+    <owners>$author$</owners>
+    <licenseUrl>https://github.com/postworthy/WebScraper/blob/master/README.md</licenseUrl>
+    <projectUrl>https://github.com/postworthy/WebScraper/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>$description$</description>
+    <releaseNotes>Changes have been made</releaseNotes>
+    <copyright>Copyright 2016</copyright>
+    <tags>NetCore WebScraper</tags>
+  </metadata>
+</package>
