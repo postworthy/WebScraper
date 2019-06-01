@@ -1,68 +1,27 @@
-﻿using Newtonsoft.Json;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading.Tasks;
-using WebScraper;
 
-namespace WebScraper
+namespace Function
 {
-    public class Program
+    public class FunctionHandler
     {
-        private static object outputlock = new object();
         private const string YOUTUBE_EMBED = "https://www.youtube.com/embed/";
 
-
-        static void Main(string[] args)
+        public async Task<(int, string)> Handle(HttpRequest request)
         {
-            foreach (var line in Run(args, ConsoleIn()))
-            {
-                Console.WriteLine(line);
-            }
+            var reader = new StreamReader(request.Body);
+            var input = await reader.ReadToEndAsync();
+
+            if (Uri.TryCreate(input, UriKind.Absolute, out var uri))
+                return (200, await ScrapeContent(uri));
+            else
+                return (404, $"Not Found!");
         }
 
-        private static IEnumerable<string> ConsoleIn()
-        {
-            while (true)
-            {
-                yield return Console.ReadLine();
-            }
-        }
-
-        public static IEnumerable<string> Run(string[] args, IEnumerable<string> inputs)
-        {
-            var results = new ConcurrentBag<string>();
-            var t = Task.Factory.StartNew(() =>
-            {
-                foreach (var input in inputs)
-                {
-                    Task.Factory.StartNew(async () =>
-                    {
-                        if (Uri.TryCreate(input, UriKind.Absolute, out Uri uri))
-                        {
-                            var json = await ScrapeContent(uri);
-                            var base64 = Convert.ToBase64String(ASCIIEncoding.UTF8.GetBytes(json));
-                            lock (outputlock)
-                            {
-                                results.Add(base64);
-                            }
-                        }
-                    });
-                }
-            });
-
-            while(true)
-            {
-                while (results.TryTake(out var result))
-                {
-                    yield return result;
-                }
-            }
-        }
 
         public static async Task<string> ScrapeContent(Uri uri)
         {
